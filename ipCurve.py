@@ -18,8 +18,9 @@ blue = (0,0,255)
 winkel = 0
 radius = 20
 
-speed = 45                                                                                                              #niedriger ist schneller
+gameSpeed = 45                                                                                                          #niedriger ist schneller
 size = 5
+speed = size                                                                                                            #size and speed need to be the same to draw a nice looking line
 
 zufall1 = random.randint(20, height-20)                                                                                 #I need two random numbers for the x and y coordinate
 zufall2 = random.randint(20, width-20)
@@ -31,14 +32,14 @@ xStart = zufall2
 yStart = zufall1
 
 xEnd = zufall2
-yEnd = zufall1-size                                                                                                     #A: we need to subttract the same value here as we do at the other point A (currently line 51)
+yEnd = zufall1-speed                                                                                                    #A: we need to subttract the same value here as we do at the other point A (currently line 51)
 
 
 run = True
 
 
 while run:
-    pygame.time.delay(speed)                                                                                            #with this parameter you essentially control how often the game runs the loop, therefore you control the speed of the drawing
+    pygame.time.delay(gameSpeed)                                                                                        #with this parameter you essentially control how often the game runs the loop, therefore you control the speed of the drawing
     for event in pygame.event.get():                                                                                    #for being able to close the game with the x in the top right corner
         if event.type == pygame.QUIT:
             run = False
@@ -49,10 +50,10 @@ while run:
 
                                                                                                                         #pygame.draw.line draws a line on our surface with chosen color(defined up top) from a start to an end position.
     pygame.draw.line(win, red, (xStart, yStart), (xEnd, yEnd), size)                                                    #A: here we need to put the same amount in size as we do in the other A (currently line 34),
-    xStart = xEnd-(size*math.sin(winkel))                                                                               # this way we ensure its a square that gets drawn from pygame. If you dont habe equal values here
-    yStart = yStart-(size*math.cos(winkel))                                                                             # you end up with a weird looking sideways movement.
-    xEnd = xEnd-(size*math.sin(winkel))
-    yEnd = yEnd-(size*math.cos(winkel))                                                                                 # https://imgur.com/ErTLFns You control with sin and cos how much we move in each (x,y) direction
+    xStart = xEnd-(speed*math.sin(winkel))                                                                              # this way we ensure its a square that gets drawn from pygame. If you dont habe equal values here
+    yStart = yStart-(speed*math.cos(winkel))                                                                            # you end up with a weird looking sideways movement.
+    xEnd = xEnd-(speed*math.sin(winkel))
+    yEnd = yEnd-(speed*math.cos(winkel))                                                                                # https://imgur.com/ErTLFns You control with sin and cos how much we move in each (x,y) direction
 
 
     if keys[pygame.K_LEFT]:
