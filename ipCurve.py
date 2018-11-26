@@ -15,16 +15,18 @@ red = (255,0,0)
 green = (0,255,0)
 blue = (0,0,255)
 
-winkel = 0
+
 radius = 20
 
 gameSpeed = 45                                                                                                          #niedriger ist schneller
 size = 5
 speed = size                                                                                                            #size and speed need to be the same to draw a nice looking line
 
-zufall1 = random.randint(20, height-20)                                                                                 #I need two random numbers for the x and y coordinate
-zufall2 = random.randint(20, width-20)
+zufall1 = random.randint(80, height-80)                                                                               #I need two random numbers for the x and y coordinate
+zufall2 = random.randint(80, width-80)
+zufall3 = random.randint(0, 7)
 
+winkel = zufall3
 
 win = pygame.display.set_mode((height,width))
 
@@ -50,7 +52,7 @@ while run:
 
                                                                                                                         #pygame.draw.line draws a line on our surface with chosen color(defined up top) from a start to an end position.
     pygame.draw.line(win, red, (xStart, yStart), (xEnd, yEnd), size)                                                    #A: here we need to put the same amount in size as we do in the other A (currently line 34),
-    xStart = xEnd-(speed*math.sin(winkel))                                                                              # this way we ensure its a square that gets drawn from pygame. If you dont habe equal values here
+    xStart = xStart-(speed*math.sin(winkel))                                                                              # this way we ensure its a square that gets drawn from pygame. If you dont habe equal values here
     yStart = yStart-(speed*math.cos(winkel))                                                                            # you end up with a weird looking sideways movement.
     xEnd = xEnd-(speed*math.sin(winkel))
     yEnd = yEnd-(speed*math.cos(winkel))                                                                                # https://imgur.com/ErTLFns You control with sin and cos how much we move in each (x,y) direction
