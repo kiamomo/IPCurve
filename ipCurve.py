@@ -32,7 +32,7 @@ class Player:
     def setRadius(self, radius):
         self.radius = radius
 
-    def setInitialPosition(self, height=800, width=800, speed=0):
+    def setInitialPosition(self, height=800, width=800, speed=5):
         x1 = random.randint(80, width - 80)
         y1 = random.randint(80, height - 80)
         x2 = x1
