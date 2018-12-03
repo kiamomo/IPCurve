@@ -7,7 +7,6 @@ pygame.display.set_caption("IPCurve")
 basicfont = pygame.font.SysFont(None, 48)
 
 
-
 class Player:
     # defining colors
     __colors = {
