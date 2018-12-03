@@ -1,7 +1,6 @@
 import pygame
 import math
 import random
-import numpy
 
 pygame.init()
 pygame.display.set_caption("IPCurve")
@@ -82,10 +81,13 @@ class Game:
 # print(pygame.K_LEFT) --> 276
 # print(pygame.K_a) --> 97
 # print(pygame.K_d) --> 100
+# print(pygame.K_g)
+# print(pygame.K_j)
 
 game = Game()
 game.addPlayer(name="Spieler_1", color="white", left=276, right=275)
 game.addPlayer(name="Spieler_2", color="red", left=97, right=100)
+game.addPlayer(name="Spieler_3", color="blue", left=103, right=106)
 
 run = True
 draw = True
@@ -125,9 +127,9 @@ while run:
             # https://imgur.com/ErTLFns You control with sin and cos how much we move in each (x,y) direction
             # pygame.draw.line draws a line on our surface with chosen color(defined up top) from a start to an end position.
 
+
             # Here we are able to control in which direction we draw a new square
             # radius controls the slized of pi you add or subtract from our sin,cos function up top
-
 
             left = player.left
             right = player.right
