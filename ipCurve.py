@@ -18,13 +18,16 @@ class Player:
         "blue": (0, 0, 255)
     }
 
-    def __init__(self, name="", color="red"):
+    def __init__(self, name="", color="red", left=0, right=0):
         self.name = name
         self.color = self.__colors[color]
         self.score = 0
         # the amount of times we divide pi, to get more or less slices
         self.radius = 20
         self.setInitialPosition()
+        self.left = left
+        self.right = right
+
 
     def setColor(self, color):
         self.color = color
@@ -61,8 +64,8 @@ class Game:
         # I need two random numbers for the x and y coordinate
         self.speed = self.size
 
-    def addPlayer(self, name="", color=""):
-        player = Player(name=name, color=color)
+    def addPlayer(self, name="", color="", left=0, right=0):
+        player = Player(name=name, color=color, left=left, right=right)
         self.players.append(player)
 
     def getPlayer(self):
@@ -73,16 +76,22 @@ class Game:
             print(player.name, player.color)
 
 
-# winkel = player1.getPosition()[2]
+
+# Jede Taste hat eine eigene Zahl
+# print(pygame.K_RIGHT) --> 275
+# print(pygame.K_LEFT) --> 276
+# print(pygame.K_a) --> 97
+# print(pygame.K_d) --> 100
 
 game = Game()
-game.addPlayer(name="Spieler_1", color="white")
-game.addPlayer(name="Spieler_2", color="red")
+game.addPlayer(name="Spieler_1", color="white", left=276, right=275)
+game.addPlayer(name="Spieler_2", color="red", left=97, right=100)
 
 run = True
 draw = True
 
 while run:
+
 
     pygame.time.delay(game.gameSpeed)
     # with this parameter you essentially control how often the game runs the loop, therefore you control the speed of the drawing
@@ -119,10 +128,14 @@ while run:
             # Here we are able to control in which direction we draw a new square
             # radius controls the slized of pi you add or subtract from our sin,cos function up top
 
-            if keys[pygame.K_LEFT]:
+
+            left = player.left
+            right = player.right
+
+            if keys[left]:
                 winkel = winkel + math.pi / player.radius
 
-            if keys[pygame.K_RIGHT]:
+            if keys[right]:
                 winkel = winkel - math.pi / player.radius
 
             player.setPosition(xStart, yStart, xEnd, yEnd, winkel)
