@@ -20,19 +20,16 @@ class Player:
     def __init__(self, name="", color="red", left=0, right=0):
         self.name = name
         self.color = self.__colors[color]
-        self.score = 0
-        # the amount of times we divide pi, to get more or less slices
-        self.radius = 20
-        self.setInitialPosition()
         self.left = left
         self.right = right
 
+        self.setInitialPosition()
+        self.pastPositions = []
 
-    def setColor(self, color):
-        self.color = color
+        self.score = 0
+        # the amount of times we divide pi, to get more or less slices
+        self.radius = 20
 
-    def setRadius(self, radius):
-        self.radius = radius
 
     def setInitialPosition(self, height=800, width=800, speed=5):
         x1 = random.randint(80, width - 80)
@@ -48,6 +45,24 @@ class Player:
     def getPosition(self):
         return self.position
 
+    def setPastPositions(self, x1, y1):
+        self.pastPositions.append(position[(x1, y1)])
+
+    def setColor(self, color):
+        self.color = color
+
+    def setRadius(self, radius):
+        self.radius = radius
+
+    def setName(self, name):
+        self.name = name
+
+    def setColor(self, color):
+        self.color = color
+
+
+
+
 
 class Game:
 
@@ -60,7 +75,6 @@ class Game:
         self.players = []
         # size and speed need to be the same to draw a nice looking line
         self.size = 5
-        # I need two random numbers for the x and y coordinate
         self.speed = self.size
 
     def addPlayer(self, name="", color="", left=0, right=0):
@@ -70,19 +84,29 @@ class Game:
     def getPlayer(self):
         print(self.players)
 
-    def egal(self):
-        for player in self.players:
-            print(player.name, player.color)
+    def setHeight(self, height):
+        self.height = height
+
+    def setWidth(self, width):
+        self.width = width
+
+    def setGameSpeed(self, gameSpeed):
+        self.gameSpeed = gameSpeed
+
+    def setSize(self, size):
+        self.size = size
+
+
 
 
 
 # Jede Taste hat eine eigene Zahl
-# print(pygame.K_RIGHT) --> 275
 # print(pygame.K_LEFT) --> 276
+# print(pygame.K_RIGHT) --> 275
 # print(pygame.K_a) --> 97
 # print(pygame.K_d) --> 100
-# print(pygame.K_g)
-# print(pygame.K_j)
+# print(pygame.K_g) --> 103
+# print(pygame.K_j) --> 106
 
 game = Game()
 game.addPlayer(name="Spieler_1", color="white", left=276, right=275)
