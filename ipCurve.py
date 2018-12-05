@@ -135,8 +135,6 @@ while run:
 
     keys = pygame.key.get_pressed()
 
-    if draw:
-        pass
 
     for player in game.players:
 
