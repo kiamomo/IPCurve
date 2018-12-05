@@ -95,11 +95,17 @@ class Game:
 
     def addPastPositions(self, x1, y1):
         self.pastPositions.append(x1)
-        self.pastPositions.append(y1)
+        self.pastPositions.append(y1-2.5)
 
     def checkCollision(self, x1, y1):
-        if x1 and y1 in self.pastPositions[:-2]:
+        y1 = y1-2.5
+        if x1-2 <= x1 <= x1+2 and y1-2 <= y1 <= y1+2 in self.pastPositions[:]:
             print("Collision?")
+
+
+
+    #this doesnt seem to work, as tested in test
+    #x1 and y1 kind of works
 
 
 
@@ -115,8 +121,8 @@ class Game:
 # print(pygame.K_j) --> 106
 
 game = Game()
-game.addPlayer(name="Spieler_1", color="white", left=276, right=275)
-#game.addPlayer(name="Spieler_2", color="red", left=97, right=100)
+game.addPlayer(name="Spieler_1", color="red", left=276, right=275)
+#game.addPlayer(name="Spieler_2", color="white", left=97, right=100)
 #game.addPlayer(name="Spieler_3", color="blue", left=103, right=106)
 
 run = True
@@ -154,6 +160,8 @@ while run:
         game.checkCollision(xStart, yStart)
 
         pygame.draw.line(game.win, player.color, (xStart, yStart), (xEnd, yEnd), game.size)
+        pygame.draw.line(game.win, (255,255,255), (xStart, yStart-2.5), (xStart, yStart-2.5), 4)
+        pygame.draw.line(game.win, (255, 255, 255), (xStart, yStart-0.5), (xStart, yStart-4.5), 1)
 
         # Here we are able to control in which direction we draw a new square
         # radius controls the slized of pi you add or subtract from our sin,cos function up top
@@ -181,7 +189,12 @@ while run:
         #print("3")
         game.addPastPositions(xStart, yStart)
 
-        #print(game.pastPositions)
+
+
+
+
+
+
     """
 
     if xEnd > width or xEnd < 0 or yEnd > height or yEnd < 0:
