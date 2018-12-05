@@ -24,7 +24,6 @@ class Player:
         self.right = right
 
         self.setInitialPosition()
-        self.pastPositions = []
 
         self.score = 0
         # the amount of times we divide pi, to get more or less slices
@@ -44,9 +43,6 @@ class Player:
 
     def getPosition(self):
         return self.position
-
-    def setPastPositions(self, x1, y1):
-        self.pastPositions.append(position[(x1, y1)])
 
     def setColor(self, color):
         self.color = color
@@ -73,6 +69,7 @@ class Game:
         self.gameSpeed = 45
         self.win = pygame.display.set_mode((height, width))
         self.players = []
+        self.pastPositions = []
         # size and speed need to be the same to draw a nice looking line
         self.size = 5
         self.speed = self.size
@@ -96,6 +93,15 @@ class Game:
     def setSize(self, size):
         self.size = size
 
+    def addPastPositions(self, x1, y1):
+        self.pastPositions.append(x1)
+        self.pastPositions.append(y1)
+
+    def checkCollision(self, x1, y1):
+        if x1 and y1 in self.pastPositions[:-2]:
+            print("Collision?")
+
+
 
 
 
@@ -110,8 +116,8 @@ class Game:
 
 game = Game()
 game.addPlayer(name="Spieler_1", color="white", left=276, right=275)
-game.addPlayer(name="Spieler_2", color="red", left=97, right=100)
-game.addPlayer(name="Spieler_3", color="blue", left=103, right=106)
+#game.addPlayer(name="Spieler_2", color="red", left=97, right=100)
+#game.addPlayer(name="Spieler_3", color="blue", left=103, right=106)
 
 run = True
 draw = True
@@ -130,41 +136,54 @@ while run:
     keys = pygame.key.get_pressed()
 
     if draw:
+        pass
 
-        for player in game.players:
+    for player in game.players:
 
-            position = player.getPosition()
+        position = player.getPosition()
 
-            xStart = position[0]
-            yStart = position[1]
-            xEnd = position[2]
-            yEnd = position[3]
-            winkel = position[4]
+        xStart = position[0]
+        yStart = position[1]
+        xEnd = position[2]
+        yEnd = position[3]
+        winkel = position[4]
 
-            pygame.draw.line(game.win, player.color, (xStart, yStart), (xEnd, yEnd), game.size)
+        #print("1")
 
-            xStart = xStart - (game.speed * math.sin(winkel))
-            yStart = yStart - (game.speed * math.cos(winkel))
-            xEnd = xEnd - (game.speed * math.sin(winkel))
-            yEnd = yEnd - (game.speed * math.cos(winkel))
+        print(player.getPosition())
+        print(game.pastPositions)
 
-            # https://imgur.com/ErTLFns You control with sin and cos how much we move in each (x,y) direction
-            # pygame.draw.line draws a line on our surface with chosen color(defined up top) from a start to an end position.
+        game.checkCollision(xStart, yStart)
+
+        pygame.draw.line(game.win, player.color, (xStart, yStart), (xEnd, yEnd), game.size)
+
+        # Here we are able to control in which direction we draw a new square
+        # radius controls the slized of pi you add or subtract from our sin,cos function up top
+
+        left = player.left
+        right = player.right
+
+        if keys[left]:
+            winkel = winkel + math.pi / player.radius
+
+        if keys[right]:
+            winkel = winkel - math.pi / player.radius
+
+        xStart = xStart - (game.speed * math.sin(winkel))
+        yStart = yStart - (game.speed * math.cos(winkel))
+        xEnd = xEnd - (game.speed * math.sin(winkel))
+        yEnd = yEnd - (game.speed * math.cos(winkel))
+
+        # https://imgur.com/ErTLFns You control with sin and cos how much we move in each (x,y) direction
 
 
-            # Here we are able to control in which direction we draw a new square
-            # radius controls the slized of pi you add or subtract from our sin,cos function up top
+        #print("2")
+        player.setPosition(xStart, yStart, xEnd, yEnd, winkel)
 
-            left = player.left
-            right = player.right
+        #print("3")
+        game.addPastPositions(xStart, yStart)
 
-            if keys[left]:
-                winkel = winkel + math.pi / player.radius
-
-            if keys[right]:
-                winkel = winkel - math.pi / player.radius
-
-            player.setPosition(xStart, yStart, xEnd, yEnd, winkel)
+        #print(game.pastPositions)
     """
 
     if xEnd > width or xEnd < 0 or yEnd > height or yEnd < 0:
