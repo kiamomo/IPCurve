@@ -74,6 +74,8 @@ class Game:
         self.size = 5
         self.speed = self.size
 
+
+
     def addPlayer(self, name="", color="", left=0, right=0):
         player = Player(name=name, color=color, left=left, right=right)
         self.players.append(player)
@@ -99,13 +101,25 @@ class Game:
 
     def checkCollision(self, x1, y1):
         y1 = y1-2.5
-        if x1-2 <= x1 <= x1+2 and y1-2 <= y1 <= y1+2 in self.pastPositions[:]:
+        if x1 and y1 in self.pastPositions[:-2]:
             print("Collision?")
-
-
+        #if x1-2 <= x1 <= x1+2 and y1-2 <= y1 <= y1+2 in self.pastPositions[:-2]:
+        #    print("Collision?")
 
     #this doesnt seem to work, as tested in test
     #x1 and y1 kind of works
+
+    def checkInRange(x, y, a):
+        if x < y:
+            Ausgabe1 = a - x
+
+        if y < x:
+            Ausgabe1 = a - y
+
+        if Ausgabe1 >= 0:
+            return True
+
+
 
 
 
@@ -126,7 +140,7 @@ game.addPlayer(name="Spieler_1", color="red", left=276, right=275)
 #game.addPlayer(name="Spieler_3", color="blue", left=103, right=106)
 
 run = True
-draw = True
+
 
 while run:
 
@@ -144,6 +158,7 @@ while run:
 
     for player in game.players:
 
+
         position = player.getPosition()
 
         xStart = position[0]
@@ -154,8 +169,9 @@ while run:
 
         #print("1")
 
-        print(player.getPosition())
-        print(game.pastPositions)
+        #print(player.getPosition())
+        #print(game.pastPositions)
+
 
         game.checkCollision(xStart, yStart)
 
@@ -188,7 +204,7 @@ while run:
 
         #print("3")
         game.addPastPositions(xStart, yStart)
-
+        #print(game.pastPositionsLenght)
 
 
 
