@@ -69,7 +69,8 @@ class Game:
         self.gameSpeed = 45
         self.win = pygame.display.set_mode((height, width))
         self.players = []
-        self.pastPositions = []
+        self.pastXpositions = []
+        self.pastYpositions = []
         # size and speed need to be the same to draw a nice looking line
         self.size = 5
         self.speed = self.size
@@ -96,9 +97,10 @@ class Game:
         self.size = size
 
     def addPastPositions(self, x1, y1):
-        self.pastPositions.append(x1)
-        self.pastPositions.append(y1-2.5)
+        self.pastXpositions.append(x1)
+        self.pastYpositions.append(y1-2.5)
 
+'''
     def checkCollision(self, x1, y1):
         y1 = y1-2.5
         if x1 and y1 in self.pastPositions[:-2]:
@@ -108,7 +110,21 @@ class Game:
 
     #this doesnt seem to work, as tested in test
     #x1 and y1 kind of works
-
+'''
+    def checkCollision(self, x1, y1):
+        for i in self.pastXpositions:
+            if x1-2 <= i <= x1+2:
+                collisionX = True
+            else:
+                pass
+        for j in self.pastYpositions:
+            if y1-2 <= j <= y1+2:
+                collisionY = True
+            else:
+                pass
+        if collisionX and collisionY:
+            print("Collision")
+'''
     def checkInRange(x, y, a):
         if x < y:
             Ausgabe1 = a - x
@@ -118,6 +134,8 @@ class Game:
 
         if Ausgabe1 >= 0:
             return True
+'''
+
 
 
 
