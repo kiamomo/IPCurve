@@ -100,30 +100,27 @@ class Game:
         self.pastXpositions.append(x1)
         self.pastYpositions.append(y1-2.5)
 
-'''
     def checkCollision(self, x1, y1):
-        y1 = y1-2.5
-        if x1 and y1 in self.pastPositions[:-2]:
-            print("Collision?")
-        #if x1-2 <= x1 <= x1+2 and y1-2 <= y1 <= y1+2 in self.pastPositions[:-2]:
-        #    print("Collision?")
-
-    #this doesnt seem to work, as tested in test
-    #x1 and y1 kind of works
-'''
-    def checkCollision(self, x1, y1):
-        for i in self.pastXpositions:
-            if x1-2 <= i <= x1+2:
-                collisionX = True
-            else:
-                pass
-        for j in self.pastYpositions:
+        collisionX = False
+        collisionY = False
+        y1 = y1 -2.5
+        for j in self.pastYpositions[:-1]:
             if y1-2 <= j <= y1+2:
                 collisionY = True
-            else:
-                pass
-        if collisionX and collisionY:
-            print("Collision")
+                break
+
+        for i in self.pastXpositions[:-1]:
+            if x1 - 2 <= i <= x1 + 2:
+                collisionX = True
+                break
+
+        if collisionX:
+            print("1")
+            if collisionY:
+                print("2")
+
+
+
 '''
     def checkInRange(x, y, a):
         if x < y:
@@ -136,10 +133,17 @@ class Game:
             return True
 '''
 
+'''
+def checkCollision(self, x1, y1):
+    y1 = y1-2.5
+    if x1 and y1 in self.pastPositions[:-2]:
+        print("Collision?")
+    #if x1-2 <= x1 <= x1+2 and y1-2 <= y1 <= y1+2 in self.pastPositions[:-2]:
+    #    print("Collision?")
 
-
-
-
+#this doesnt seem to work, as tested in test
+#x1 and y1 kind of works
+'''
 
 
 
