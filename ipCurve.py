@@ -28,6 +28,7 @@ class Player:
         self.score = 0
         # the amount of times we divide pi, to get more or less slices
         self.radius = 20
+        self.draw = True
 
 
     def setInitialPosition(self, height=800, width=800, speed=5):
@@ -97,29 +98,29 @@ class Game:
         self.size = size
 
     def addPastPositions(self, x1, y1):
+        y1 = y1-2.5
         self.pastXpositions.append(x1)
-        self.pastYpositions.append(y1-2.5)
+        self.pastYpositions.append(y1)
 
     def checkCollision(self, x1, y1):
         collisionX = False
         collisionY = False
+        interval = 0.05
         y1 = y1 -2.5
         for j in self.pastYpositions[:-1]:
-            if y1-2 <= j <= y1+2:
+            if y1-interval <= j <= y1+interval:
                 collisionY = True
                 break
 
         for i in self.pastXpositions[:-1]:
-            if x1 - 2 <= i <= x1 + 2:
+            if x1 -interval <= i <= x1 + interval:
                 collisionX = True
                 break
 
         if collisionX:
-            print("1")
             if collisionY:
-                print("2")
-
-
+                print("Collision!")
+                player.draw = False
 
 '''
     def checkInRange(x, y, a):
@@ -180,58 +181,54 @@ while run:
 
     for player in game.players:
 
+        #if player.draw == True:
 
-        position = player.getPosition()
+            position = player.getPosition()
 
-        xStart = position[0]
-        yStart = position[1]
-        xEnd = position[2]
-        yEnd = position[3]
-        winkel = position[4]
+            xStart = position[0]
+            yStart = position[1]
+            xEnd = position[2]
+            yEnd = position[3]
+            winkel = position[4]
 
-        #print("1")
+            #print("1")
 
-        #print(player.getPosition())
-        #print(game.pastPositions)
-
-
-        game.checkCollision(xStart, yStart)
-
-        pygame.draw.line(game.win, player.color, (xStart, yStart), (xEnd, yEnd), game.size)
-        pygame.draw.line(game.win, (255,255,255), (xStart, yStart-2.5), (xStart, yStart-2.5), 4)
-        pygame.draw.line(game.win, (255, 255, 255), (xStart, yStart-0.5), (xStart, yStart-4.5), 1)
-
-        # Here we are able to control in which direction we draw a new square
-        # radius controls the slized of pi you add or subtract from our sin,cos function up top
-
-        left = player.left
-        right = player.right
-
-        if keys[left]:
-            winkel = winkel + math.pi / player.radius
-
-        if keys[right]:
-            winkel = winkel - math.pi / player.radius
-
-        xStart = xStart - (game.speed * math.sin(winkel))
-        yStart = yStart - (game.speed * math.cos(winkel))
-        xEnd = xEnd - (game.speed * math.sin(winkel))
-        yEnd = yEnd - (game.speed * math.cos(winkel))
-
-        # https://imgur.com/ErTLFns You control with sin and cos how much we move in each (x,y) direction
+            #print(player.getPosition())
+            #print(game.pastPositions)
 
 
-        #print("2")
-        player.setPosition(xStart, yStart, xEnd, yEnd, winkel)
+            game.checkCollision(xStart, yStart)
 
-        #print("3")
-        game.addPastPositions(xStart, yStart)
-        #print(game.pastPositionsLenght)
+            pygame.draw.line(game.win, player.color, (xStart, yStart), (xEnd, yEnd), game.size)
+            #pygame.draw.line(game.win, (255,255,255), (xStart, yStart-2.5), (xStart, yStart-2.5), 4)
+            #pygame.draw.line(game.win, (255, 255, 255), (xStart, yStart-0.5), (xStart, yStart-4.5), 1)
+
+            # Here we are able to control in which direction we draw a new square
+            # radius controls the slized of pi you add or subtract from our sin,cos function up top
+
+            left = player.left
+            right = player.right
+
+            if keys[left]:
+                winkel = winkel + math.pi / player.radius
+
+            if keys[right]:
+                winkel = winkel - math.pi / player.radius
+
+            xStart = xStart - (game.speed * math.sin(winkel))
+            yStart = yStart - (game.speed * math.cos(winkel))
+            xEnd = xEnd - (game.speed * math.sin(winkel))
+            yEnd = yEnd - (game.speed * math.cos(winkel))
+
+            # https://imgur.com/ErTLFns You control with sin and cos how much we move in each (x,y) direction
 
 
+            #print("2")
+            player.setPosition(xStart, yStart, xEnd, yEnd, winkel)
 
-
-
+            #print("3")
+            game.addPastPositions(xStart, yStart)
+            #print(game.pastPositionsLenght)
 
     """
 
@@ -247,7 +244,7 @@ while run:
         win.fill((255, 255, 255))
         win.blit(text, textrect)
         draw = False
-"""
+    """
     pygame.display.update()
 
 pygame.quit()
