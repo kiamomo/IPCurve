@@ -75,6 +75,8 @@ class Game:
         # size and speed need to be the same to draw a nice looking line
         self.size = 5
         self.speed = self.size
+        self.collisionX = False
+        self.collisionY = False
 
 
 
@@ -103,48 +105,25 @@ class Game:
         self.pastYpositions.append(y1)
 
     def checkCollision(self, x1, y1):
-        collisionX = False
-        collisionY = False
-        interval = 0.05
+        interval = 1
         y1 = y1 -2.5
         for j in self.pastYpositions[:-1]:
             if y1-interval <= j <= y1+interval:
-                collisionY = True
+                self.collisionY = True
                 break
 
         for i in self.pastXpositions[:-1]:
             if x1 -interval <= i <= x1 + interval:
-                collisionX = True
+                self.collisionX = True
                 break
 
-        if collisionX:
-            if collisionY:
-                print("Collision!")
+        # XColliision wird erkannt und gespeichert. Egal wann jetzt eine Ycollision kommt, erkennt er eine "volle" Collision.
+        if self.collisionX:
+            print("XCollision!")
+            if self.collisionY:
+                print("YCollision!")
                 player.draw = False
 
-'''
-    def checkInRange(x, y, a):
-        if x < y:
-            Ausgabe1 = a - x
-
-        if y < x:
-            Ausgabe1 = a - y
-
-        if Ausgabe1 >= 0:
-            return True
-'''
-
-'''
-def checkCollision(self, x1, y1):
-    y1 = y1-2.5
-    if x1 and y1 in self.pastPositions[:-2]:
-        print("Collision?")
-    #if x1-2 <= x1 <= x1+2 and y1-2 <= y1 <= y1+2 in self.pastPositions[:-2]:
-    #    print("Collision?")
-
-#this doesnt seem to work, as tested in test
-#x1 and y1 kind of works
-'''
 
 
 
@@ -181,7 +160,7 @@ while run:
 
     for player in game.players:
 
-        #if player.draw == True:
+        if player.draw == True:
 
             position = player.getPosition()
 
@@ -191,17 +170,14 @@ while run:
             yEnd = position[3]
             winkel = position[4]
 
-            #print("1")
-
-            #print(player.getPosition())
-            #print(game.pastPositions)
-
-
             game.checkCollision(xStart, yStart)
 
+
+
+
             pygame.draw.line(game.win, player.color, (xStart, yStart), (xEnd, yEnd), game.size)
-            #pygame.draw.line(game.win, (255,255,255), (xStart, yStart-2.5), (xStart, yStart-2.5), 4)
-            #pygame.draw.line(game.win, (255, 255, 255), (xStart, yStart-0.5), (xStart, yStart-4.5), 1)
+            pygame.draw.line(game.win, (255,255,255), (xStart, yStart-2.5), (xStart, yStart-2.5), 2)
+            pygame.draw.line(game.win, (255, 255, 255), (xStart, yStart-1.5), (xStart, yStart-3.5), 1)
 
             # Here we are able to control in which direction we draw a new square
             # radius controls the slized of pi you add or subtract from our sin,cos function up top
@@ -223,12 +199,12 @@ while run:
             # https://imgur.com/ErTLFns You control with sin and cos how much we move in each (x,y) direction
 
 
-            #print("2")
+
             player.setPosition(xStart, yStart, xEnd, yEnd, winkel)
 
-            #print("3")
+
             game.addPastPositions(xStart, yStart)
-            #print(game.pastPositionsLenght)
+
 
     """
 
