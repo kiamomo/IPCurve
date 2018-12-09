@@ -26,6 +26,9 @@ class Player:
         self.setInitialPosition()
 
         self.score = 0
+        self.pastXpositions = []
+        self.pastYpositions = []
+
         # the amount of times we divide pi, to get more or less slices
         self.radius = 20
         self.draw = True
@@ -70,8 +73,6 @@ class Game:
         self.gameSpeed = 45
         self.win = pygame.display.set_mode((height, width))
         self.players = []
-        self.pastXpositions = []
-        self.pastYpositions = []
         # size and speed need to be the same to draw a nice looking line
         self.size = 5
         self.speed = self.size
@@ -101,16 +102,16 @@ class Game:
 
     def addPastPositions(self, x1, y1):
         y1 = y1-2.5
-        self.pastXpositions.append(x1)
-        self.pastYpositions.append(y1)
+        player.pastXpositions.append(x1)
+        player.pastYpositions.append(y1)
 
     def checkCollision(self, x1, y1):
         interval = 3
         y1 = y1 - 2.5
         k = 0
-        for i in self.pastYpositions[:-1]:
+        for i in player.pastYpositions[:-1]:
             if y1-interval <= i <= y1+interval:
-                if x1-interval <= self.pastXpositions[k] <= x1+interval:
+                if x1-interval <= player.pastXpositions[k] <= x1+interval:
                     self.collision = True
                     break
             k = k + 1
@@ -137,7 +138,7 @@ class Game:
 
 game = Game()
 game.addPlayer(name="Spieler_1", color="red", left=276, right=275)
-#game.addPlayer(name="Spieler_2", color="white", left=97, right=100)
+game.addPlayer(name="Spieler_2", color="white", left=97, right=100)
 #game.addPlayer(name="Spieler_3", color="blue", left=103, right=106)
 
 run = True
@@ -195,10 +196,7 @@ while run:
 
             # https://imgur.com/ErTLFns You control with sin and cos how much we move in each (x,y) direction
 
-
-
             player.setPosition(xStart, yStart, xEnd, yEnd, winkel)
-
 
             game.addPastPositions(xStart, yStart)
 
