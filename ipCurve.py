@@ -75,8 +75,8 @@ class Game:
         # size and speed need to be the same to draw a nice looking line
         self.size = 5
         self.speed = self.size
-        self.collisionX = False
-        self.collisionY = False
+        self.collision = False
+
 
 
 
@@ -105,24 +105,23 @@ class Game:
         self.pastYpositions.append(y1)
 
     def checkCollision(self, x1, y1):
-        interval = 1
-        y1 = y1 -2.5
-        for j in self.pastYpositions[:-1]:
-            if y1-interval <= j <= y1+interval:
-                self.collisionY = True
-                break
+        interval = 3
+        y1 = y1 - 2.5
+        k = 0
+        for i in self.pastYpositions[:-1]:
+            if y1-interval <= i <= y1+interval:
+                if x1-interval <= self.pastXpositions[k] <= x1+interval:
+                    self.collision = True
+                    break
+            k = k + 1
 
-        for i in self.pastXpositions[:-1]:
-            if x1 -interval <= i <= x1 + interval:
-                self.collisionX = True
-                break
+        if self.collision:
+            player.draw = False
 
-        # XColliision wird erkannt und gespeichert. Egal wann jetzt eine Ycollision kommt, erkennt er eine "volle" Collision.
-        if self.collisionX:
-            print("XCollision!")
-            if self.collisionY:
-                print("YCollision!")
-                player.draw = False
+        # Collision an xStelle 4 + yStelle 7 = Collision... Wir schauen nicht gleichzeiig in beiden arrays...
+        # https://imgur.com/u18IY7V
+        # jetzt schon, wuhu
+
 
 
 
@@ -172,12 +171,10 @@ while run:
 
             game.checkCollision(xStart, yStart)
 
-
-
-
             pygame.draw.line(game.win, player.color, (xStart, yStart), (xEnd, yEnd), game.size)
-            pygame.draw.line(game.win, (255,255,255), (xStart, yStart-2.5), (xStart, yStart-2.5), 2)
-            pygame.draw.line(game.win, (255, 255, 255), (xStart, yStart-1.5), (xStart, yStart-3.5), 1)
+            #Collisions Rechtreck
+            #pygame.draw.line(game.win, (255, 255, 255), (xStart, yStart-2.5), (xStart, yStart-2.5), 6)
+            #pygame.draw.line(game.win, (255, 255, 255), (xStart, yStart+0.5), (xStart, yStart-5.5), 1)
 
             # Here we are able to control in which direction we draw a new square
             # radius controls the slized of pi you add or subtract from our sin,cos function up top
