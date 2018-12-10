@@ -79,7 +79,6 @@ class Game:
 
 
 
-
     def addPlayer(self, name="", color="", left=0, right=0):
         player = Player(name=name, color=color, left=left, right=right)
         self.players.append(player)
@@ -115,6 +114,7 @@ class Game:
                     break
             k = k + 1
 
+
         if self.collision:
             player.draw = False
 
@@ -137,7 +137,7 @@ class Game:
 
 game = Game()
 game.addPlayer(name="Spieler_1", color="red", left=276, right=275)
-#game.addPlayer(name="Spieler_2", color="white", left=97, right=100)
+game.addPlayer(name="Spieler_2", color="white", left=97, right=100)
 #game.addPlayer(name="Spieler_3", color="blue", left=103, right=106)
 
 run = True
@@ -169,8 +169,6 @@ while run:
             yEnd = position[3]
             winkel = position[4]
 
-            game.checkCollision(xStart, yStart)
-
             pygame.draw.line(game.win, player.color, (xStart, yStart), (xEnd, yEnd), game.size)
             #Collisions Rechtreck
             #pygame.draw.line(game.win, (255, 255, 255), (xStart, yStart-2.5), (xStart, yStart-2.5), 6)
@@ -195,10 +193,9 @@ while run:
 
             # https://imgur.com/ErTLFns You control with sin and cos how much we move in each (x,y) direction
 
-
+            game.checkCollision(xStart, yStart)
 
             player.setPosition(xStart, yStart, xEnd, yEnd, winkel)
-
 
             game.addPastPositions(xStart, yStart)
 
@@ -221,3 +218,4 @@ while run:
     pygame.display.update()
 
 pygame.quit()
+
