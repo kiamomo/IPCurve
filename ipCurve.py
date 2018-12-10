@@ -79,6 +79,7 @@ class Game:
 
 
 
+
     def addPlayer(self, name="", color="", left=0, right=0):
         player = Player(name=name, color=color, left=left, right=right)
         self.players.append(player)
@@ -107,7 +108,7 @@ class Game:
         interval = 3
         y1 = y1 - 2.5
         k = 0
-        for i in self.pastYpositions[:-1]:
+        for i in self.pastYpositions[:-3]:
             if y1-interval <= i <= y1+interval:
                 if x1-interval <= self.pastXpositions[k] <= x1+interval:
                     self.collision = True
@@ -117,11 +118,25 @@ class Game:
 
         if self.collision:
             player.draw = False
-
-        # Collision an xStelle 4 + yStelle 7 = Collision... Wir schauen nicht gleichzeiig in beiden arrays...
-        # https://imgur.com/u18IY7V
-        # jetzt schon, wuhu
-
+            '''
+            #print(player.name)
+            if player.name is 'Spieler_1':
+                #print(player.name)
+                print("1")
+                #del self.players[0]
+                #self.players.pop(0)
+                print("1")
+                print(player.name)
+                #print(self.players[0])
+                #player.draw = False
+            if player.name is 'Spieler_2':
+                #print(player.name)
+                print("2")
+                #del self.players[1]
+                #self.players.pop(1)
+            if player.name is 'Spieler_3':
+                print("3")
+            '''
 
 
 
@@ -155,11 +170,11 @@ while run:
             run = False
 
     keys = pygame.key.get_pressed()
-
+    print(game.players)
 
     for player in game.players:
 
-        if player.draw == True:
+        if player.draw:
 
             position = player.getPosition()
 
@@ -168,6 +183,8 @@ while run:
             xEnd = position[2]
             yEnd = position[3]
             winkel = position[4]
+
+            game.checkCollision(xStart, yStart)
 
             pygame.draw.line(game.win, player.color, (xStart, yStart), (xEnd, yEnd), game.size)
             #Collisions Rechtreck
@@ -193,28 +210,27 @@ while run:
 
             # https://imgur.com/ErTLFns You control with sin and cos how much we move in each (x,y) direction
 
-            game.checkCollision(xStart, yStart)
 
             player.setPosition(xStart, yStart, xEnd, yEnd, winkel)
 
             game.addPastPositions(xStart, yStart)
 
 
-    """
-
-    if xEnd > width or xEnd < 0 or yEnd > height or yEnd < 0:
-        # checks if we hit the the edge of our screen
-        # random piece of code i found online to display text
-
-        text = basicfont.render('You lost!', True, (255, 0, 0), (255, 255, 255))
-        textrect = text.get_rect()
-        textrect.centerx = win.get_rect().centerx
-        textrect.centery = win.get_rect().centery
-
-        win.fill((255, 255, 255))
-        win.blit(text, textrect)
-        draw = False
-    """
+        """
+    
+        if xEnd > width or xEnd < 0 or yEnd > height or yEnd < 0:
+            # checks if we hit the the edge of our screen
+            # random piece of code i found online to display text
+    
+            text = basicfont.render('You lost!', True, (255, 0, 0), (255, 255, 255))
+            textrect = text.get_rect()
+            textrect.centerx = win.get_rect().centerx
+            textrect.centery = win.get_rect().centery
+    
+            win.fill((255, 255, 255))
+            win.blit(text, textrect)
+            draw = False
+        """
     pygame.display.update()
 
 pygame.quit()
