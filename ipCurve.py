@@ -108,35 +108,13 @@ class Game:
         interval = 3
         y1 = y1 - 2.5
         k = 0
-        for i in self.pastYpositions[:-3]:
+        for i in self.pastYpositions[:-2]:
             if y1-interval <= i <= y1+interval:
                 if x1-interval <= self.pastXpositions[k] <= x1+interval:
-                    self.collision = True
+                    player.draw = False
                     break
             k = k + 1
 
-
-        if self.collision:
-            player.draw = False
-            '''
-            #print(player.name)
-            if player.name is 'Spieler_1':
-                #print(player.name)
-                print("1")
-                #del self.players[0]
-                #self.players.pop(0)
-                print("1")
-                print(player.name)
-                #print(self.players[0])
-                #player.draw = False
-            if player.name is 'Spieler_2':
-                #print(player.name)
-                print("2")
-                #del self.players[1]
-                #self.players.pop(1)
-            if player.name is 'Spieler_3':
-                print("3")
-            '''
 
 
 
@@ -170,21 +148,20 @@ while run:
             run = False
 
     keys = pygame.key.get_pressed()
-    print(game.players)
 
     for player in game.players:
 
+        position = player.getPosition()
+
+        xStart = position[0]
+        yStart = position[1]
+        xEnd = position[2]
+        yEnd = position[3]
+        winkel = position[4]
+
+        game.checkCollision(xStart, yStart)
+
         if player.draw:
-
-            position = player.getPosition()
-
-            xStart = position[0]
-            yStart = position[1]
-            xEnd = position[2]
-            yEnd = position[3]
-            winkel = position[4]
-
-            game.checkCollision(xStart, yStart)
 
             pygame.draw.line(game.win, player.color, (xStart, yStart), (xEnd, yEnd), game.size)
             #Collisions Rechtreck
@@ -210,13 +187,25 @@ while run:
 
             # https://imgur.com/ErTLFns You control with sin and cos how much we move in each (x,y) direction
 
-
             player.setPosition(xStart, yStart, xEnd, yEnd, winkel)
 
             game.addPastPositions(xStart, yStart)
 
+        pygame.display.update()
 
-        """
+pygame.quit()
+
+
+
+
+
+
+
+
+
+
+
+"""
     
         if xEnd > width or xEnd < 0 or yEnd > height or yEnd < 0:
             # checks if we hit the the edge of our screen
@@ -231,7 +220,7 @@ while run:
             win.blit(text, textrect)
             draw = False
         """
-    pygame.display.update()
 
-pygame.quit()
+
+
 
