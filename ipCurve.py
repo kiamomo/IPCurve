@@ -7,6 +7,7 @@ pygame.display.set_caption("IPCurve")
 basicfont = pygame.font.SysFont(None, 48)
 
 
+
 class Player:
     # defining colors
     __colors = {
@@ -30,9 +31,11 @@ class Player:
         # the amount of times we divide pi, to get more or less slices
         self.radius = 20
         self.draw = True
+
         self.gapCounter = 0
+        self.randomGap = random.randint(30,80)
         self.gap = False
-        self.gapRandomInt = []
+
 
 
 
@@ -63,11 +66,10 @@ class Player:
         self.color = color
 
     def gapCreator(self):
-        a = random.sample(self.gapRandomInt, 1)
         print(self.gapCounter)
         if self.gap == False:
             self.gapCounter = self.gapCounter + 1
-            if self.gapCounter is a[1]:
+            if self.gapCounter is self.randomGap:
                 self.gap = True
                 self.gapCounter = 0
         if self.gap == True:
@@ -76,17 +78,15 @@ class Player:
                 self.gap = False
                 self.gapCounter = 0
 
+
     # This function set gap True or False, depending on gapCounter.
     # While gap is
     # True: The game loop doesnt draw and doesnt append to pastPositionArray,
     # but it sets new positions for the now invisible line.
     # False: The gapCounter now counts to a random Number between 30 and 80 until it sets gap = True
-    # Random number to ensure unpredictability when a gap occures
+    # Random number to ensure no two players have the same occurence
 
-player = Player()
-for i in range (30, 80):
-    player.gapRandomInt.append(i)
-print(player.gapRandomInt)
+
 
 
 
