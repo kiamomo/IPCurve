@@ -26,9 +26,6 @@ class Player:
         self.setInitialPosition()
 
         self.score = 0
-        self.pastXpositions = []
-        self.pastYpositions = []
-
         # the amount of times we divide pi, to get more or less slices
         self.radius = 20
         self.draw = True
@@ -73,6 +70,8 @@ class Game:
         self.gameSpeed = 45
         self.win = pygame.display.set_mode((height, width))
         self.players = []
+        self.pastXpositions = []
+        self.pastYpositions = []
         # size and speed need to be the same to draw a nice looking line
         self.size = 5
         self.speed = self.size
@@ -102,27 +101,42 @@ class Game:
 
     def addPastPositions(self, x1, y1):
         y1 = y1-2.5
-        player.pastXpositions.append(x1)
-        player.pastYpositions.append(y1)
+        self.pastXpositions.append(x1)
+        self.pastYpositions.append(y1)
 
     def checkCollision(self, x1, y1):
         interval = 3
         y1 = y1 - 2.5
         k = 0
-        for i in player.pastYpositions[:-1]:
+        for i in self.pastYpositions[:-3]:
             if y1-interval <= i <= y1+interval:
-                if x1-interval <= player.pastXpositions[k] <= x1+interval:
+                if x1-interval <= self.pastXpositions[k] <= x1+interval:
                     self.collision = True
                     break
             k = k + 1
 
+
         if self.collision:
             player.draw = False
-
-        # Collision an xStelle 4 + yStelle 7 = Collision... Wir schauen nicht gleichzeiig in beiden arrays...
-        # https://imgur.com/u18IY7V
-        # jetzt schon, wuhu
-
+            '''
+            #print(player.name)
+            if player.name is 'Spieler_1':
+                #print(player.name)
+                print("1")
+                #del self.players[0]
+                #self.players.pop(0)
+                print("1")
+                print(player.name)
+                #print(self.players[0])
+                #player.draw = False
+            if player.name is 'Spieler_2':
+                #print(player.name)
+                print("2")
+                #del self.players[1]
+                #self.players.pop(1)
+            if player.name is 'Spieler_3':
+                print("3")
+            '''
 
 
 
@@ -156,11 +170,11 @@ while run:
             run = False
 
     keys = pygame.key.get_pressed()
-
+    print(game.players)
 
     for player in game.players:
 
-        if player.draw == True:
+        if player.draw:
 
             position = player.getPosition()
 
@@ -196,26 +210,28 @@ while run:
 
             # https://imgur.com/ErTLFns You control with sin and cos how much we move in each (x,y) direction
 
+
             player.setPosition(xStart, yStart, xEnd, yEnd, winkel)
 
             game.addPastPositions(xStart, yStart)
 
 
-    """
-
-    if xEnd > width or xEnd < 0 or yEnd > height or yEnd < 0:
-        # checks if we hit the the edge of our screen
-        # random piece of code i found online to display text
-
-        text = basicfont.render('You lost!', True, (255, 0, 0), (255, 255, 255))
-        textrect = text.get_rect()
-        textrect.centerx = win.get_rect().centerx
-        textrect.centery = win.get_rect().centery
-
-        win.fill((255, 255, 255))
-        win.blit(text, textrect)
-        draw = False
-    """
+        """
+    
+        if xEnd > width or xEnd < 0 or yEnd > height or yEnd < 0:
+            # checks if we hit the the edge of our screen
+            # random piece of code i found online to display text
+    
+            text = basicfont.render('You lost!', True, (255, 0, 0), (255, 255, 255))
+            textrect = text.get_rect()
+            textrect.centerx = win.get_rect().centerx
+            textrect.centery = win.get_rect().centery
+    
+            win.fill((255, 255, 255))
+            win.blit(text, textrect)
+            draw = False
+        """
     pygame.display.update()
 
 pygame.quit()
+
