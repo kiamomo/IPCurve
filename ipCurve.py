@@ -150,9 +150,12 @@ class Game:
     # Funktioniert noch nicht wirklich...
     def newGame(self):
         if keys[pygame.K_SPACE]:
+            player.setInitialPosition()
             game.win.fill((0, 0, 0))
-            Player.setInitialPosition(self, height=800, width=800, speed=5)
-            Player.draw = False
+            self.pastYpositions = []
+            self.pastXpositions = []
+            player.draw = True
+
 
 
 
@@ -187,11 +190,11 @@ while run:
 
     keys = pygame.key.get_pressed()
 
-    game.newGame()
 
     for player in game.players:
 
 
+        game.newGame()
         position = player.getPosition()
         xStart = position[0]
         yStart = position[1]
