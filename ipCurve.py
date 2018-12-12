@@ -33,7 +33,7 @@ class Player:
         self.draw = True
 
         self.gapCounter = 0
-        self.randomGap = random.randint(30,80)
+        self.randomGap = random.randint(50,80)
         self.gap = False
 
 
@@ -66,7 +66,6 @@ class Player:
         self.color = color
 
     def gapCreator(self):
-        print(self.gapCounter)
         if self.gap == False:
             self.gapCounter = self.gapCounter + 1
             if self.gapCounter is self.randomGap:
@@ -83,7 +82,7 @@ class Player:
     # While gap is
     # True: The game loop doesnt draw and doesnt append to pastPositionArray,
     # but it sets new positions for the now invisible line.
-    # False: The gapCounter now counts to a random Number between 30 and 80 until it sets gap = True
+    # False: The gapCounter now counts to a random Number between 50 and 80 until it sets gap = True
     # Random number to ensure no two players have the same occurence
 
 
@@ -105,7 +104,6 @@ class Game:
         self.size = 5
         self.speed = self.size
         self.collision = False
-
 
 
     def addPlayer(self, name="", color="", left=0, right=0):
@@ -149,6 +147,13 @@ class Game:
             player.draw = False
 
 
+    # Funktioniert noch nicht wirklich...
+    def newGame(self):
+        if keys[pygame.K_SPACE]:
+            game.win.fill((0, 0, 0))
+            Player.setInitialPosition(self, height=800, width=800, speed=5)
+            Player.draw = False
+
 
 
 
@@ -159,6 +164,7 @@ class Game:
 # print(pygame.K_d) --> 100
 # print(pygame.K_g) --> 103
 # print(pygame.K_j) --> 106
+# print(pygame.K_SPACE) --> 32
 
 game = Game()
 game.addPlayer(name="Spieler_1", color="red", left=276, right=275)
@@ -181,7 +187,10 @@ while run:
 
     keys = pygame.key.get_pressed()
 
+    game.newGame()
+
     for player in game.players:
+
 
         position = player.getPosition()
         xStart = position[0]
