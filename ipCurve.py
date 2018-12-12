@@ -25,12 +25,15 @@ class Player:
 
         self.setInitialPosition()
 
-        self.score = 0
+        self.score = 10
+
         # the amount of times we divide pi, to get more or less slices
         self.radius = 20
         self.draw = True
         self.gapCounter = 0
         self.gap = False
+        self.gapRandomInt = []
+
 
 
     def setInitialPosition(self, height=800, width=800, speed=5):
@@ -60,19 +63,30 @@ class Player:
         self.color = color
 
     def gapCreator(self):
+        a = random.sample(self.gapRandomInt, 1)
+        print(self.gapCounter)
         if self.gap == False:
             self.gapCounter = self.gapCounter + 1
-            if self.gapCounter is random.randint(30,80):
+            if self.gapCounter is a[1]:
                 self.gap = True
                 self.gapCounter = 0
         if self.gap == True:
-            self.gapCounter = self.gapCounter+1
+            self.gapCounter = self.gapCounter + 1
             if self.gapCounter is 6:
                 self.gap = False
                 self.gapCounter = 0
 
+    # This function set gap True or False, depending on gapCounter.
+    # While gap is
+    # True: The game loop doesnt draw and doesnt append to pastPositionArray,
+    # but it sets new positions for the now invisible line.
+    # False: The gapCounter now counts to a random Number between 30 and 80 until it sets gap = True
+    # Random number to ensure unpredictability when a gap occures
 
-
+player = Player()
+for i in range (30, 80):
+    player.gapRandomInt.append(i)
+print(player.gapRandomInt)
 
 
 
@@ -91,8 +105,6 @@ class Game:
         self.size = 5
         self.speed = self.size
         self.collision = False
-        self.stop = True
-
 
 
 
@@ -153,6 +165,9 @@ game.addPlayer(name="Spieler_1", color="red", left=276, right=275)
 game.addPlayer(name="Spieler_2", color="white", left=97, right=100)
 #game.addPlayer(name="Spieler_3", color="blue", left=103, right=106)
 
+
+
+
 run = True
 while run:
 
@@ -165,7 +180,6 @@ while run:
             run = False
 
     keys = pygame.key.get_pressed()
-
 
     for player in game.players:
 
@@ -227,11 +241,7 @@ pygame.quit()
 
 
 """
-    
         if xEnd > width or xEnd < 0 or yEnd > height or yEnd < 0:
-            # checks if we hit the the edge of our screen
-            # random piece of code i found online to display text
-    
             text = basicfont.render('You lost!', True, (255, 0, 0), (255, 255, 255))
             textrect = text.get_rect()
             textrect.centerx = win.get_rect().centerx
@@ -240,7 +250,7 @@ pygame.quit()
             win.fill((255, 255, 255))
             win.blit(text, textrect)
             draw = False
-        """
+"""
 
 
 
