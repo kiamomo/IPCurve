@@ -29,6 +29,7 @@ class Player:
         # the amount of times we divide pi, to get more or less slices
         self.radius = 20
         self.draw = True
+        self.gap = False
 
 
     def setInitialPosition(self, height=800, width=800, speed=5):
@@ -134,8 +135,6 @@ game.addPlayer(name="Spieler_2", color="white", left=97, right=100)
 #game.addPlayer(name="Spieler_3", color="blue", left=103, right=106)
 
 run = True
-
-
 while run:
 
 
@@ -152,7 +151,6 @@ while run:
     for player in game.players:
 
         position = player.getPosition()
-
         xStart = position[0]
         yStart = position[1]
         xEnd = position[2]
@@ -163,13 +161,14 @@ while run:
 
         if player.draw:
 
-            pygame.draw.line(game.win, player.color, (xStart, yStart), (xEnd, yEnd), game.size)
-            #Collisions Rechtreck
-            #pygame.draw.line(game.win, (255, 255, 255), (xStart, yStart-2.5), (xStart, yStart-2.5), 6)
-            #pygame.draw.line(game.win, (255, 255, 255), (xStart, yStart+0.5), (xStart, yStart-5.5), 1)
+            if player.gap == False:
+                pygame.draw.line(game.win, player.color, (xStart, yStart), (xEnd, yEnd), game.size)
+                #Collisions Rechtreck
+                #pygame.draw.line(game.win, (255, 255, 255), (xStart, yStart-2.5), (xStart, yStart-2.5), 6)
+                #pygame.draw.line(game.win, (255, 255, 255), (xStart, yStart+0.5), (xStart, yStart-5.5), 1)
 
-            # Here we are able to control in which direction we draw a new square
-            # radius controls the slized of pi you add or subtract from our sin,cos function up top
+                # Here we are able to control in which direction we draw a new square
+                # radius controls the slized of pi you add or subtract from our sin,cos function up top
 
             left = player.left
             right = player.right
