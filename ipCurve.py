@@ -147,7 +147,6 @@ class Game:
             player.draw = False
 
 
-    # Funktioniert noch nicht wirklich...
     def newGame(self):
         if keys[pygame.K_SPACE]:
             player.setInitialPosition()
