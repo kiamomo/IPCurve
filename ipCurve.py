@@ -109,6 +109,14 @@ class Game:
         interval = 3
         y1 = y1 - 2.5
         k = 0
+        '''
+        YwithoutHead = self.pastYpositions
+        try:
+            del YwithoutHead[-len(self.players]
+            #Das geht nicht wenn das array am anfang noch leer ist.
+        except:
+            #nicht sicher was hier hin sollte
+        '''
         for i in self.pastYpositions[:-2]:
             if y1-interval <= i <= y1+interval:
                 if x1-interval <= self.pastXpositions[k] <= x1+interval:
