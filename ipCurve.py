@@ -29,6 +29,7 @@ class Player:
         # the amount of times we divide pi, to get more or less slices
         self.radius = 20
         self.draw = True
+        self.gapCounter = 0
         self.gap = False
 
 
@@ -58,6 +59,19 @@ class Player:
     def setColor(self, color):
         self.color = color
 
+    def gapCreator(self):
+        if self.gap == False:
+            self.gapCounter = self.gapCounter + 1
+            if self.gapCounter is random.randint(30,80):
+                self.gap = True
+                self.gapCounter = 0
+        if self.gap == True:
+            self.gapCounter = self.gapCounter+1
+            if self.gapCounter is 6:
+                self.gap = False
+                self.gapCounter = 0
+
+
 
 
 
@@ -77,6 +91,7 @@ class Game:
         self.size = 5
         self.speed = self.size
         self.collision = False
+        self.stop = True
 
 
 
@@ -109,21 +124,17 @@ class Game:
         interval = 3
         y1 = y1 - 2.5
         k = 0
-        '''
-        YwithoutHead = self.pastYpositions
-        try:
-            del YwithoutHead[-len(self.players]
-            #Das geht nicht wenn das array am anfang noch leer ist.
-        except:
-            #nicht sicher was hier hin sollte
-        '''
-        for i in self.pastYpositions[:-2]:
+        for i in self.pastYpositions[:-len(self.players)]:
             if y1-interval <= i <= y1+interval:
                 if x1-interval <= self.pastXpositions[k] <= x1+interval:
                     player.draw = False
                     break
             k = k + 1
 
+    def checkWallCollision(self, x1, y1):
+        y1 = y1 - 2.5
+        if x1 > game.width or x1 < 0 or y1 > game.height or y1 < 0:
+            player.draw = False
 
 
 
@@ -145,7 +156,6 @@ game.addPlayer(name="Spieler_2", color="white", left=97, right=100)
 run = True
 while run:
 
-
     pygame.time.delay(game.gameSpeed)
     # with this parameter you essentially control how often the game runs the loop, therefore you control the speed of the drawing
     # for being able to close the game with the x in the top right corner
@@ -155,6 +165,7 @@ while run:
             run = False
 
     keys = pygame.key.get_pressed()
+
 
     for player in game.players:
 
@@ -166,15 +177,17 @@ while run:
         winkel = position[4]
 
         game.checkCollision(xStart, yStart)
+        game.checkWallCollision(xStart, yStart)
 
         if player.draw:
+
+            player.gapCreator()
 
             if player.gap == False:
                 pygame.draw.line(game.win, player.color, (xStart, yStart), (xEnd, yEnd), game.size)
                 #Collisions Rechtreck
                 #pygame.draw.line(game.win, (255, 255, 255), (xStart, yStart-2.5), (xStart, yStart-2.5), 6)
                 #pygame.draw.line(game.win, (255, 255, 255), (xStart, yStart+0.5), (xStart, yStart-5.5), 1)
-
                 # Here we are able to control in which direction we draw a new square
                 # radius controls the slized of pi you add or subtract from our sin,cos function up top
 
@@ -196,7 +209,8 @@ while run:
 
             player.setPosition(xStart, yStart, xEnd, yEnd, winkel)
 
-            game.addPastPositions(xStart, yStart)
+            if player.gap == False:
+                game.addPastPositions(xStart, yStart)
 
         pygame.display.update()
 
