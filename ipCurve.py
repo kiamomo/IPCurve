@@ -63,9 +63,6 @@ class Player:
     def setName(self, name):
         self.name = name
 
-    def setColor(self, color):
-        self.color = color
-
     def gapCreator(self):
         if self.gap == False:
             self.gapCounter = self.gapCounter + 1
@@ -205,6 +202,9 @@ class Game:
             # Sets the lastPlayerCounter to zero
             # Slight delay for a cleaner looking start
 
+    def endGameMenue(self):
+        #TODO run through game.players and check how many player.draw are False. If len(game.players) -1 are False trigger if statement.
+        pass
 
 
 
