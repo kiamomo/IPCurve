@@ -34,7 +34,8 @@ class Player:
         self.draw = True
 
         self.gapCounter = 0
-        self.randomGap = random.randint(50,80)
+        self.gapLength = 6
+        self.randomGap = random.randint(60,90)
         self.gap = False
 
         self.runCollisionChecks = True
@@ -73,7 +74,7 @@ class Player:
                 self.gapCounter = 0
         if self.gap == True:
             self.gapCounter = self.gapCounter + 1
-            if self.gapCounter is 6:
+            if self.gapCounter is self.gapLength:
                 self.gap = False
                 self.gapCounter = 0
 
@@ -117,6 +118,7 @@ class Game:
         # niedriger ist schneller, 45 is best
         self.gameSpeed = 45
         self.win = pygame.display.set_mode((height, width))
+        self.win.fill((20, 20, 20))
 
         self.players = []
         self.pastXpositions = []
@@ -185,7 +187,7 @@ class Game:
     def newGame(self):
         if keys[pygame.K_SPACE]:
             player.setInitialPosition()
-            game.win.fill((0, 0, 0))
+            self.win.fill((30, 30, 30))
             self.pastYpositions = []
             self.pastXpositions = []
 
@@ -218,7 +220,7 @@ class Game:
 game = Game()
 game.addPlayer(name="Spieler_1", color="red", left=276, right=275)
 game.addPlayer(name="Spieler_2", color="white", left=97, right=100)
-game.addPlayer(name="Spieler_3", color="blue", left=103, right=106)
+#game.addPlayer(name="Spieler_3", color="blue", left=103, right=106)
 
 
 
