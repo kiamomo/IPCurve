@@ -5,7 +5,7 @@ import random
 pygame.init()
 pygame.display.set_caption("IPCurve")
 font = pygame.font.SysFont(None, 48)
-
+background = (40,40,40)
 
 
 class Player:
@@ -14,8 +14,8 @@ class Player:
         "pink": (255, 0, 255),
         "white": (255, 255, 255),
         "red": (255, 0, 0),
-        "green": (0, 255, 0),
-        "blue": (0, 0, 255)
+        "green": (60, 255, 60),
+        "blue": (100, 100, 255)
     }
 
     def __init__(self, name="", color="red", left=0, right=0):
@@ -118,7 +118,7 @@ class Game:
         # niedriger ist schneller, 45 is best
         self.gameSpeed = 45
         self.win = pygame.display.set_mode((height, width))
-        self.win.fill((20, 20, 20))
+        self.win.fill(background)
 
         self.players = []
         self.pastXpositions = []
@@ -187,7 +187,7 @@ class Game:
     def newGame(self):
         if keys[pygame.K_SPACE]:
             player.setInitialPosition()
-            self.win.fill((30, 30, 30))
+            self.win.fill(background)
             self.pastYpositions = []
             self.pastXpositions = []
 
@@ -211,17 +211,23 @@ class Game:
 # Jede Taste hat eine eigene Zahl
 # print(pygame.K_LEFT) --> 276
 # print(pygame.K_RIGHT) --> 275
+
 # print(pygame.K_a) --> 97
-# print(pygame.K_d) --> 100
+# print(pygame.K_s) --> 115
+
 # print(pygame.K_g) --> 103
-# print(pygame.K_j) --> 106
+# print(pygame.K_h) --> 104
+
+#print(pygame.K_k) --> 107
+#print(pygame.K_l) --> 108
+
 # print(pygame.K_SPACE) --> 32
 
 game = Game()
 game.addPlayer(name="Spieler_1", color="red", left=276, right=275)
-game.addPlayer(name="Spieler_2", color="white", left=97, right=100)
-#game.addPlayer(name="Spieler_3", color="blue", left=103, right=106)
-
+game.addPlayer(name="Spieler_2", color="white", left=97, right=115)
+game.addPlayer(name="Spieler_3", color="blue", left=103, right=104)
+game.addPlayer(name="Spieler_4", color="green", left=107, right=108)
 
 
 
