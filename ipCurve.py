@@ -4,7 +4,7 @@ import random
 
 pygame.init()
 pygame.display.set_caption("IPCurve")
-basicfont = pygame.font.SysFont(None, 48)
+font = pygame.font.SysFont(None, 48)
 
 
 
@@ -27,6 +27,7 @@ class Player:
         self.setInitialPosition()
 
         self.score = 10
+        self.scoreAccess = 0
 
         # the amount of times we divide pi, to get more or less slices
         self.radius = 20
@@ -36,15 +37,14 @@ class Player:
         self.randomGap = random.randint(50,80)
         self.gap = False
 
-
-
+        self.runCollisionChecks = True
 
     def setInitialPosition(self, height=800, width=800, speed=5):
         x1 = random.randint(80, width - 80)
         y1 = random.randint(80, height - 80)
         x2 = x1
         y2 = y1 - speed
-        winkel = random.randint(0, 7)
+        winkel = random.randint(0, 50)
         self.position = [x1, y1, x2, y2, winkel]
 
     def setPosition(self, x1, y1, x2, y2, winkel):
@@ -77,7 +77,6 @@ class Player:
                 self.gap = False
                 self.gapCounter = 0
 
-
     # This function set gap True or False, depending on gapCounter.
     # While gap is
     # True: The game loop doesnt draw and doesnt append to pastPositionArray,
@@ -85,9 +84,30 @@ class Player:
     # False: The gapCounter now counts to a random Number between 50 and 80 until it sets gap = True
     # Random number to ensure no two players have the same occurence
 
+    def scoreKeeper(self):
+        if self.scoreAccess is 1:
+            self.score = self.score - 1
+            self.scoreAccess = 0
+            print(player.name, player.score)
+        if player.score is 0:
+            player.draw = False
 
+    # This function waits for scoreAccess to be 1.
+    # scoreAccess turns 1 after a collision.
+    # Then it decreases the score by one and locks the Access again.
+    # Second if condition asks if a player has no points.
+    # If so he isn't able to draw anymore.
 
+    def lastPlayerCheck(self):
+        if game.lastPlayerCounter is len(game.players) - 1:
+            self.draw = False
 
+    # Here it checks if a player is the last player by letting it count up each time a player terminates.
+    # It then checks if "number of players" - 1 already terminated. If so the current player is the last one.
+    # After that we set draw = False to bypass the scoreKeeper function which triggers
+    # when the collision functions trigger.
+    # If we let the last player collide as usual, everyone would loose a point in each round.
+    # (That would be pointless. Pun intended.)
 
 class Game:
 
@@ -97,14 +117,16 @@ class Game:
         # niedriger ist schneller, 45 is best
         self.gameSpeed = 45
         self.win = pygame.display.set_mode((height, width))
+
         self.players = []
         self.pastXpositions = []
         self.pastYpositions = []
+
         # size and speed need to be the same to draw a nice looking line
         self.size = 5
         self.speed = self.size
-        self.collision = False
 
+        self.lastPlayerCounter = 0
 
     def addPlayer(self, name="", color="", left=0, right=0):
         player = Player(name=name, color=color, left=left, right=right)
@@ -138,6 +160,13 @@ class Game:
             if y1-interval <= i <= y1+interval:
                 if x1-interval <= self.pastXpositions[k] <= x1+interval:
                     player.draw = False
+                    player.runCollisionChecks = False
+                    player.scoreAccess = 1
+                    self.lastPlayerCounter = self.lastPlayerCounter + 1
+                    # Stops the if statement for drawing the line
+                    # After detecting a collision stops further checks for a collision
+                    # Allows the player.scoreKeeper to run. Subtracts one from start points.
+                    # Adds one to the lastPlayerCounter
                     break
             k = k + 1
 
@@ -145,7 +174,13 @@ class Game:
         y1 = y1 - 2.5
         if x1 > game.width or x1 < 0 or y1 > game.height or y1 < 0:
             player.draw = False
-
+            player.runCollisionChecks = False
+            player.scoreAccess = 1
+            self.lastPlayerCounter = self.lastPlayerCounter + 1
+            # Stops the if statement for drawing the line
+            # After detecting a collision stops further checks for a collision
+            # Allows the player.scoreKeeper to run. Subtracts one from start points.
+            # Adds one to the lastPlayerCounter
 
     def newGame(self):
         if keys[pygame.K_SPACE]:
@@ -153,8 +188,20 @@ class Game:
             game.win.fill((0, 0, 0))
             self.pastYpositions = []
             self.pastXpositions = []
-            player.draw = True
 
+            player.draw = True
+            player.runCollisionChecks = True
+
+            self.lastPlayerCounter = 0
+
+            pygame.time.delay(100)
+            # Sets new positions and angle etc; Just like at the start of the game
+            # Paints a black screen
+            # Empties the pastPosition lists
+            # Re-enables the ability to draw the line
+            # Re-enables the ability to check for collision
+            # Sets the lastPlayerCounter to zero
+            # Slight delay for a cleaner looking start
 
 
 
@@ -171,7 +218,7 @@ class Game:
 game = Game()
 game.addPlayer(name="Spieler_1", color="red", left=276, right=275)
 game.addPlayer(name="Spieler_2", color="white", left=97, right=100)
-#game.addPlayer(name="Spieler_3", color="blue", left=103, right=106)
+game.addPlayer(name="Spieler_3", color="blue", left=103, right=106)
 
 
 
@@ -191,8 +238,6 @@ while run:
 
 
     for player in game.players:
-
-
         game.newGame()
         position = player.getPosition()
         xStart = position[0]
@@ -201,10 +246,15 @@ while run:
         yEnd = position[3]
         winkel = position[4]
 
-        game.checkCollision(xStart, yStart)
-        game.checkWallCollision(xStart, yStart)
+        if player.runCollisionChecks:
+            game.checkCollision(xStart, yStart)
+            game.checkWallCollision(xStart, yStart)
+
+        player.scoreKeeper()
 
         if player.draw:
+
+            player.lastPlayerCheck()
 
             player.gapCreator()
 

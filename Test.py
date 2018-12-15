@@ -83,15 +83,6 @@ list.append(d)
 
 print(list)
 print(player)
-del list[-2]
-print(list)
 
-list = []
-
-for i in range (30, 80):
-    list.append(i)
-
-print(list)
-
-a = random.sample(list, 1)
-print(a)
+if len(player) - 1 is 1:
+    print("yay")
