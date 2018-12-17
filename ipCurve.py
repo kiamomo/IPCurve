@@ -77,6 +77,8 @@ class Player:
         if self.gap == True:
             self.gapCounter = self.gapCounter + 1
             if self.gapCounter is self.gapLength:
+                self.randomGap = random.randint(50,100)
+                #Generates new random number for when the next gap should appear.
                 self.gap = False
                 self.gapCounter = 0
 
@@ -111,6 +113,7 @@ class Player:
     def eliminatedPlayerCheck(self):
         if game.eliminatedPlayerCounter is len(game.players) - 1:
             self.draw = False
+        #TODO Hier eventuell auf das Engamemenu, also menu2 zuweisen
 
     # Here it checks if a player is the last player by letting it count up each time a player terminates.
     # It then checks if "number of players" - 1 already terminated. If so the current player is the last one.
@@ -140,8 +143,6 @@ class Game:
 
         self.lastPlayerCounter = 0
         self.eliminatedPlayerCounter = 0
-
-        self.menueAccess = 1
 
     def addPlayer(self, name="", color="", left=0, right=0):
         player = Player(name=name, color=color, left=left, right=right)
@@ -186,7 +187,7 @@ class Game:
             k = k + 1
 
     def checkWallCollision(self, x1, y1):
-        y1 = y1 - 2.5
+        y1 = y1 - y1/2
         if x1 > game.width or x1 < 0 or y1 > game.height or y1 < 0:
             player.draw = False
             player.runCollisionChecks = False
@@ -221,18 +222,6 @@ class Game:
 
 
 
-
-
-
-
-
-
-    def endGameMenue(self):
-        #TODO run through game.players and check how many player.draw are False. If len(game.players) -1 are False trigger if statement.
-        pass
-
-
-
 # Jede Taste hat eine eigene Zahl
 # print(pygame.K_LEFT) --> 276
 # print(pygame.K_RIGHT) --> 275
@@ -254,6 +243,9 @@ game.addPlayer(name="Spieler_2", color="white", left=97, right=115)
 #game.addPlayer(name="Spieler_3", color="blue", left=103, right=104)
 #game.addPlayer(name="Spieler_4", color="green", left=107, right=108)
 
+
+
+#TODO Startmenu erstellen. Mithilfe von https://ppizarror.com/pygame-menu/
 def bgfun():
     pass
 
@@ -261,9 +253,10 @@ def elementTest():
     game.win.fill(background)
     menu._dopause = False
 
-
 menu = pygameMenu.Menu(game.win, game.width, game.height, font = pygameMenu.fonts.FONT_8BIT, title ="Test", dopause=True, bgfun = bgfun)
 menu.add_option("Return", elementTest)
+
+
 
 
 
@@ -291,7 +284,6 @@ while run:
 
 
     for player in game.players:
-
         game.newGame()
 
         position = player.getPosition()
@@ -300,6 +292,7 @@ while run:
         xEnd = position[2]
         yEnd = position[3]
         winkel = position[4]
+
 
         if player.runCollisionChecks:
             game.checkCollision(xStart, yStart)
@@ -310,6 +303,9 @@ while run:
 
         if player.draw:
 
+            pygame.draw.line(game.win, (background), (xStart, yStart), (xEnd, yEnd), game.size)
+            # 1.1 Always draws a line thats the background color.
+
             player.lastPlayerCheck()
             player.eliminatedPlayerCheck()
 
@@ -317,11 +313,12 @@ while run:
 
             if player.gap == False:
                 pygame.draw.line(game.win, player.color, (xStart, yStart), (xEnd, yEnd), game.size)
+                #1.2 This draw function draws a line ontop of the background color with the player color
+
+
                 #Collisions Rechtreck
                 #pygame.draw.line(game.win, (255, 255, 255), (xStart, yStart-2.5), (xStart, yStart-2.5), 6)
                 #pygame.draw.line(game.win, (255, 255, 255), (xStart, yStart+0.5), (xStart, yStart-5.5), 1)
-                # Here we are able to control in which direction we draw a new square
-                # radius controls the slized of pi you add or subtract from our sin,cos function up top
 
             left = player.left
             right = player.right
@@ -343,6 +340,10 @@ while run:
 
             if player.gap == False:
                 game.addPastPositions(xStart, yStart)
+
+            pygame.draw.line(game.win, (255,255,0), (xStart, yStart), (xEnd, yEnd), game.size)
+            # 1.3 This draw function draws a yellow line at the newly modified xStart and yStart.
+            # With the combination of 1.1,1.2,1.3 we are able to make it apear as to having a head.
 
         pygame.display.update()
 
