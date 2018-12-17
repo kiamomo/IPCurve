@@ -1,12 +1,16 @@
 import pygame
+import pygameMenu
+from pygameMenu.locals import *
 import math
 import random
 
 pygame.init()
 pygame.display.set_caption("IPCurve")
 font = pygame.font.SysFont(None, 48)
+print(pygame.font.match_font('arial'))
 background = (40,40,40)
-
+height = 800
+width = 800
 
 class Player:
     # defining colors
@@ -28,6 +32,7 @@ class Player:
 
         self.score = 10
         self.scoreAccess = 0
+        self.runScoreKeeper = True
 
         # the amount of times we divide pi, to get more or less slices
         self.radius = 20
@@ -40,7 +45,7 @@ class Player:
 
         self.runCollisionChecks = True
 
-    def setInitialPosition(self, height=800, width=800, speed=5):
+    def setInitialPosition(self, height=height, width=width, speed=5):
         x1 = random.randint(80, width - 80)
         y1 = random.randint(80, height - 80)
         x2 = x1
@@ -88,7 +93,10 @@ class Player:
             self.scoreAccess = 0
             print(player.name, player.score)
         if player.score is 0:
-            player.draw = False
+            self.draw = False
+            self.runScoreKeeper = False
+            game.eliminatedPlayerCounter += 1
+
 
     # This function waits for scoreAccess to be 1.
     # scoreAccess turns 1 after a collision.
@@ -100,6 +108,10 @@ class Player:
         if game.lastPlayerCounter is len(game.players) - 1:
             self.draw = False
 
+    def eliminatedPlayerCheck(self):
+        if game.eliminatedPlayerCounter is len(game.players) - 1:
+            self.draw = False
+
     # Here it checks if a player is the last player by letting it count up each time a player terminates.
     # It then checks if "number of players" - 1 already terminated. If so the current player is the last one.
     # After that we set draw = False to bypass the scoreKeeper function which triggers
@@ -107,11 +119,12 @@ class Player:
     # If we let the last player collide as usual, everyone would loose a point in each round.
     # (That would be pointless. Pun intended.)
 
+
 class Game:
 
-    def __init__(self, height: int = 800, width: int = 800) -> object:
-        self.height = 800
-        self.width = 800
+    def __init__(self, height: int = height, width: int = width) -> object:
+        self.height = height
+        self.width = width
         # niedriger ist schneller, 45 is best
         self.gameSpeed = 45
         self.win = pygame.display.set_mode((height, width))
@@ -126,6 +139,9 @@ class Game:
         self.speed = self.size
 
         self.lastPlayerCounter = 0
+        self.eliminatedPlayerCounter = 0
+
+        self.menueAccess = 1
 
     def addPlayer(self, name="", color="", left=0, right=0):
         player = Player(name=name, color=color, left=left, right=right)
@@ -181,6 +197,7 @@ class Game:
             # Allows the player.scoreKeeper to run. Subtracts one from start points.
             # Adds one to the lastPlayerCounter
 
+
     def newGame(self):
         if keys[pygame.K_SPACE]:
             player.setInitialPosition()
@@ -201,6 +218,14 @@ class Game:
             # Re-enables the ability to check for collision
             # Sets the lastPlayerCounter to zero
             # Slight delay for a cleaner looking start
+
+
+
+
+
+
+
+
 
     def endGameMenue(self):
         #TODO run through game.players and check how many player.draw are False. If len(game.players) -1 are False trigger if statement.
@@ -226,13 +251,34 @@ class Game:
 game = Game()
 game.addPlayer(name="Spieler_1", color="red", left=276, right=275)
 game.addPlayer(name="Spieler_2", color="white", left=97, right=115)
-game.addPlayer(name="Spieler_3", color="blue", left=103, right=104)
-game.addPlayer(name="Spieler_4", color="green", left=107, right=108)
+#game.addPlayer(name="Spieler_3", color="blue", left=103, right=104)
+#game.addPlayer(name="Spieler_4", color="green", left=107, right=108)
+
+def bgfun():
+    pass
+
+def elementTest():
+    game.win.fill(background)
+    menu._dopause = False
+
+
+menu = pygameMenu.Menu(game.win, game.width, game.height, font = pygameMenu.fonts.FONT_8BIT, title ="Test", dopause=True, bgfun = bgfun)
+menu.add_option("Return", elementTest)
 
 
 
 run = True
 while run:
+
+    keys = pygame.key.get_pressed()
+
+    events = pygame.event.get()
+    menu.mainloop(events)
+    menu.disable()
+
+    if keys[pygame.K_m]:
+        menu.enable()
+        menu._dopause = True
 
     pygame.time.delay(game.gameSpeed)
     # with this parameter you essentially control how often the game runs the loop, therefore you control the speed of the drawing
@@ -242,11 +288,12 @@ while run:
         if event.type == pygame.QUIT:
             run = False
 
-    keys = pygame.key.get_pressed()
 
 
     for player in game.players:
+
         game.newGame()
+
         position = player.getPosition()
         xStart = position[0]
         yStart = position[1]
@@ -258,11 +305,13 @@ while run:
             game.checkCollision(xStart, yStart)
             game.checkWallCollision(xStart, yStart)
 
-        player.scoreKeeper()
+        if player.runScoreKeeper:
+            player.scoreKeeper()
 
         if player.draw:
 
             player.lastPlayerCheck()
+            player.eliminatedPlayerCheck()
 
             player.gapCreator()
 
