@@ -30,7 +30,7 @@ class Player:
 
         self.setInitialPosition()
 
-        self.score = 10
+        self.score = 1
         self.scoreAccess = 0
         self.runScoreKeeper = True
 
@@ -113,7 +113,10 @@ class Player:
     def eliminatedPlayerCheck(self):
         if game.eliminatedPlayerCounter is len(game.players) - 1:
             self.draw = False
-        #TODO Hier eventuell auf das Engamemenu, also menu2 zuweisen
+            endMenu.enable()
+            events = pygame.event.get()
+            endMenu.mainloop(events)
+        #TODO Evnetuell hier endMenu (endScoreMenu) anzeigen.
 
     # Here it checks if a player is the last player by letting it count up each time a player terminates.
     # It then checks if "number of players" - 1 already terminated. If so the current player is the last one.
@@ -251,12 +254,13 @@ def bgfun():
 
 def elementTest():
     game.win.fill(background)
-    menu._dopause = False
+    startMenu._dopause = False
 
-menu = pygameMenu.Menu(game.win, game.width, game.height, font = pygameMenu.fonts.FONT_8BIT, title ="Test", dopause=True, bgfun = bgfun)
-menu.add_option("Return", elementTest)
+startMenu = pygameMenu.Menu(game.win, game.width, game.height, font = pygameMenu.fonts.FONT_8BIT, title ="Startmenu", dopause=True, bgfun = bgfun)
+startMenu.add_option("Return", elementTest)
 
 
+endMenu = pygameMenu.Menu(game.win, game.width, game.height, font = pygameMenu.fonts.FONT_8BIT, title ="Endmenu", dopause=True, bgfun = bgfun)
 
 
 
@@ -266,12 +270,12 @@ while run:
     keys = pygame.key.get_pressed()
 
     events = pygame.event.get()
-    menu.mainloop(events)
-    menu.disable()
+    startMenu.mainloop(events)
+    startMenu.disable()
 
     if keys[pygame.K_m]:
-        menu.enable()
-        menu._dopause = True
+        startMenu.enable()
+        startMenu._dopause = True
 
     pygame.time.delay(game.gameSpeed)
     # with this parameter you essentially control how often the game runs the loop, therefore you control the speed of the drawing
@@ -301,13 +305,14 @@ while run:
         if player.runScoreKeeper:
             player.scoreKeeper()
 
+        player.eliminatedPlayerCheck()
+
         if player.draw:
 
             pygame.draw.line(game.win, (background), (xStart, yStart), (xEnd, yEnd), game.size)
             # 1.1 Always draws a line thats the background color.
 
             player.lastPlayerCheck()
-            player.eliminatedPlayerCheck()
 
             player.gapCreator()
 
