@@ -12,6 +12,7 @@ background = (40,40,40)
 height = 800
 width = 800
 
+
 class Player:
     # defining colors
     __colors = {
