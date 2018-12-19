@@ -190,8 +190,8 @@ class Game:
             k = k + 1
 
     def checkWallCollision(self, x1, y1):
-        y1 = y1 - y1/2
-        if x1 > game.width or x1 < 0 or y1 > game.height or y1 < 0:
+        y1 = y1 - 2.5
+        if x1 > self.height or x1 < 0 or y1 > self.width or y1 < 0:
             player.draw = False
             player.runCollisionChecks = False
             player.scoreAccess = 1
