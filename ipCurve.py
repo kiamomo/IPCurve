@@ -30,7 +30,7 @@ class Player:
 
         self.setInitialPosition()
 
-        self.score = 1
+        self.score = 10
         self.scoreAccess = 0
         self.runScoreKeeper = True
 
@@ -241,10 +241,9 @@ class Game:
 # print(pygame.K_SPACE) --> 32
 
 game = Game()
-game.addPlayer(name="Spieler_1", color="red", left=276, right=275)
-game.addPlayer(name="Spieler_2", color="white", left=97, right=115)
-#game.addPlayer(name="Spieler_3", color="blue", left=103, right=104)
-#game.addPlayer(name="Spieler_4", color="green", left=107, right=108)
+
+
+
 
 
 
@@ -252,12 +251,31 @@ game.addPlayer(name="Spieler_2", color="white", left=97, right=115)
 def bgfun():
     pass
 
-def elementTest():
+def Start2():
     game.win.fill(background)
     startMenu._dopause = False
+    game.addPlayer(name="Spieler_1", color="red", left=276, right=275)
+    game.addPlayer(name="Spieler_2", color="white", left=97, right=115)
+
+def Start3():
+    game.win.fill(background)
+    startMenu._dopause = False
+    game.addPlayer(name="Spieler_1", color="red", left=276, right=275)
+    game.addPlayer(name="Spieler_2", color="white", left=97, right=115)
+    game.addPlayer(name="Spieler_3", color="blue", left=103, right=104)
+
+def Start4():
+    game.win.fill(background)
+    startMenu._dopause = False
+    game.addPlayer(name="Spieler_1", color="red", left=276, right=275)
+    game.addPlayer(name="Spieler_2", color="white", left=97, right=115)
+    game.addPlayer(name="Spieler_3", color="blue", left=103, right=104)
+    game.addPlayer(name="Spieler_4", color="green", left=107, right=108)
 
 startMenu = pygameMenu.Menu(game.win, game.width, game.height, font = pygameMenu.fonts.FONT_8BIT, title ="Startmenu", dopause=True, bgfun = bgfun)
-startMenu.add_option("Return", elementTest)
+startMenu.add_option("2 Spieler", Start2)
+startMenu.add_option("3 Spieler", Start3)
+startMenu.add_option("4 Spielern", Start4)
 
 
 endMenu = pygameMenu.Menu(game.win, game.width, game.height, font = pygameMenu.fonts.FONT_8BIT, title ="Endmenu", dopause=True, bgfun = bgfun)
