@@ -9,8 +9,8 @@ pygame.display.set_caption("IPCurve")
 font = pygame.font.SysFont(None, 48)
 print(pygame.font.match_font('arial'))
 background = (40,40,40)
-height = 800
-width = 800
+height = 600
+width = 600
 
 class Player:
     # defining colors
@@ -272,15 +272,25 @@ def Start4():
     game.addPlayer(name="Spieler_3", color="blue", left=103, right=104)
     game.addPlayer(name="Spieler_4", color="green", left=107, right=108)
 
-startMenu = pygameMenu.Menu(game.win, game.width, game.height, font = pygameMenu.fonts.FONT_8BIT, title ="Startmenu", dopause=True, bgfun = bgfun)
+startMenu = pygameMenu.Menu(game.win, game.width, game.height, font = pygameMenu.fonts.FONT_8BIT, title ="ipCurve", dopause=True, bgfun = bgfun)
 startMenu.add_option("2 Spieler", Start2)
 startMenu.add_option("3 Spieler", Start3)
 startMenu.add_option("4 Spielern", Start4)
 
 
-endMenu = pygameMenu.Menu(game.win, game.width, game.height, font = pygameMenu.fonts.FONT_8BIT, title ="Endmenu", dopause=True, bgfun = bgfun)
+
+def NewGame():
+    game.win.fill(background)
+    startMenu
+
+def Exit1():
+    PYGAME_MENU_EXIT
 
 
+endMenu = pygameMenu.TextMenu(game.win, game.width, game.height, font = pygameMenu.fonts.FONT_8BIT, title ="Endmenu", dopause=True, bgfun = bgfun)
+#endMenu.add_line(Player...wins)
+#endMenu.add_option("New Game", NewGame)
+#endMenu.add_option("Exit", Exit1)
 
 run = True
 while run:
