@@ -30,7 +30,7 @@ class Player:
 
         self.setInitialPosition()
 
-        self.score = 1
+        self.score = 2
         self.scoreAccess = 0
         self.runScoreKeeper = True
 
@@ -44,6 +44,8 @@ class Player:
         self.gap = False
 
         self.runCollisionChecks = True
+
+
 
     def setInitialPosition(self, height=height, width=width, speed=5):
         x1 = random.randint(80, width - 80)
@@ -109,18 +111,29 @@ class Player:
     def lastPlayerCheck(self):
         if game.lastPlayerCounter is len(game.players) - 1:
             self.draw = False
+            a = 0
+            for player in game.players:
+                text = font.render(player.name + ": " + str(player.score), True, (background), (255, 255, 255))
+                game.win.blit(text, (a, 0))
+                a = a + 150
+            text1 = font.render("Press Space for NEWROUND!", True, (background), (255, 255, 255))
+            game.win.blit(text1, (0, game.height-50))
+
 
     def eliminatedPlayerCheck(self):
         if game.eliminatedPlayerCounter is len(game.players) - 1:
             self.draw = False
             for player in game.players:
-                if player.score == 1:
+                if player.score != 0:
                     game.winner = player.name
             text = font.render('The winner is: ' + game.winner, True, (background), (255, 255, 255))
+            text2 = font.render("Press n for NEWGAME!", True, (background), (255, 255, 255))
             textrect = text.get_rect()
+            textrect2 = text2.get_rect()
             textrect.centerx = game.win.get_rect().centerx
             textrect.centery = game.win.get_rect().centery
             game.win.blit(text, textrect)
+            game.win.blit(text2, (0, game.height-50))
 
     # Here it checks if a player is the last player by letting it count up each time a player terminates.
     # It then checks if "number of players" - 1 already terminated. If so the current player is the last one.
@@ -152,6 +165,8 @@ class Game:
         self.eliminatedPlayerCounter = 0
 
         self.winner = ""
+
+        self.runControls = True
 
 
     def addPlayer(self, name="", color="", left=0, right=0):
@@ -209,26 +224,51 @@ class Game:
             # Adds one to the lastPlayerCounter
 
 
-    def newGame(self):
-        if keys[pygame.K_SPACE]:
-            player.setInitialPosition()
-            self.win.fill(background)
-            self.pastYpositions = []
-            self.pastXpositions = []
+    def newRound(self):
+        player.setInitialPosition()
+        self.win.fill(background)
+        self.pastYpositions = []
+        self.pastXpositions = []
 
+        if player.score != 0:
             player.draw = True
-            player.runCollisionChecks = True
+        player.runCollisionChecks = True
 
-            self.lastPlayerCounter = 0
+        self.lastPlayerCounter = 0
 
-            pygame.time.delay(100)
-            # Sets new positions and angle etc; Just like at the start of the game
-            # Paints a black screen
-            # Empties the pastPosition lists
-            # Re-enables the ability to draw the line
-            # Re-enables the ability to check for collision
-            # Sets the lastPlayerCounter to zero
-            # Slight delay for a cleaner looking start
+        pygame.time.delay(100)
+        # Sets new positions and angle etc; Just like at the start of the game
+        # Paints a black screen
+        # Empties the pastPosition lists
+        # Re-enables the ability to draw the line
+        # Re-enables the ability to check for collision
+        # Sets the lastPlayerCounter to zero
+        # Slight delay for a cleaner looking start
+
+    def newGame(self):
+        for player in game.players:
+            player.score = 10
+        print(player.name, player.score)
+
+        player.setInitialPosition()
+        self.win.fill(background)
+        self.pastYpositions = []
+        self.pastXpositions = []
+        del game.players[:]
+
+        player.draw = True
+        player.runCollisionChecks = True
+        player.runScoreKeeper = True
+
+        self.lastPlayerCounter = 0
+        self.eliminatedPlayerCounter = 0
+
+        events = pygame.event.get()
+        startMenu.mainloop(events)
+        startMenu._dopause = True
+        startMenu.enable()
+
+
 
 
 
@@ -261,25 +301,25 @@ def bgfun():
 def Start2():
     game.win.fill(background)
     startMenu._dopause = False
-    game.addPlayer(name="Spieler_1", color="red", left=276, right=275)
-    game.addPlayer(name="Spieler_2", color="white", left=97, right=115)
+    game.addPlayer(name="Rot", color="red", left=276, right=275)
+    game.addPlayer(name="Weiß", color="white", left=97, right=115)
     startMenu.disable()
 
 def Start3():
     game.win.fill(background)
     startMenu._dopause = False
-    game.addPlayer(name="Spieler_1", color="red", left=276, right=275)
-    game.addPlayer(name="Spieler_2", color="white", left=97, right=115)
-    game.addPlayer(name="Spieler_3", color="blue", left=103, right=104)
+    game.addPlayer(name="Rot", color="red", left=276, right=275)
+    game.addPlayer(name="Weiß", color="white", left=97, right=115)
+    game.addPlayer(name="Blau", color="blue", left=103, right=104)
     startMenu.disable()
 
 def Start4():
     game.win.fill(background)
     startMenu._dopause = False
-    game.addPlayer(name="Spieler_1", color="red", left=276, right=275)
-    game.addPlayer(name="Spieler_2", color="white", left=97, right=115)
-    game.addPlayer(name="Spieler_3", color="blue", left=103, right=104)
-    game.addPlayer(name="Spieler_4", color="green", left=107, right=108)
+    game.addPlayer(name="Rot", color="red", left=276, right=275)
+    game.addPlayer(name="Weiß", color="white", left=97, right=115)
+    game.addPlayer(name="Blau", color="blue", left=103, right=104)
+    game.addPlayer(name="Grün", color="green", left=107, right=108)
     startMenu.disable()
 
 
@@ -300,11 +340,6 @@ while run:
     events = pygame.event.get()
     startMenu.mainloop(events)
 
-
-    if keys[pygame.K_m]:
-        startMenu.enable()
-        startMenu._dopause = True
-
     pygame.time.delay(game.gameSpeed)
     # with this parameter you essentially control how often the game runs the loop, therefore you control the speed of the drawing
     # for being able to close the game with the x in the top right corner
@@ -314,9 +349,11 @@ while run:
             run = False
 
 
-
     for player in game.players:
-        game.newGame()
+        if keys[pygame.K_SPACE]:
+            game.newRound()
+        if keys[pygame.K_n]:
+            game.newGame()
 
         position = player.getPosition()
         xStart = position[0]
@@ -334,6 +371,7 @@ while run:
             player.scoreKeeper()
 
         player.eliminatedPlayerCheck()
+
 
         if player.draw:
 
@@ -381,29 +419,3 @@ while run:
         pygame.display.update()
 
 pygame.quit()
-
-
-
-
-
-
-
-
-
-
-
-"""
-        if xEnd > width or xEnd < 0 or yEnd > height or yEnd < 0:
-            text = basicfont.render('You lost!', True, (255, 0, 0), (255, 255, 255))
-            textrect = text.get_rect()
-            textrect.centerx = win.get_rect().centerx
-            textrect.centery = win.get_rect().centery
-    
-            win.fill((255, 255, 255))
-            win.blit(text, textrect)
-            draw = False
-"""
-
-
-
-
