@@ -30,7 +30,7 @@ class Player:
 
         self.setInitialPosition()
 
-        self.score = 2
+        self.score = 10
         self.scoreAccess = 0
         self.runScoreKeeper = True
 
