@@ -30,7 +30,7 @@ class Player:
 
         self.setInitialPosition()
 
-        self.score = 10
+        self.score = 1
         self.scoreAccess = 0
         self.runScoreKeeper = True
 
@@ -113,10 +113,14 @@ class Player:
     def eliminatedPlayerCheck(self):
         if game.eliminatedPlayerCounter is len(game.players) - 1:
             self.draw = False
-            endMenu.enable()
-            events = pygame.event.get()
-            endMenu.mainloop(events)
-        #TODO Evnetuell hier endMenu (endScoreMenu) anzeigen.
+            for player in game.players:
+                if player.score == 1:
+                    game.winner = player.name
+            text = font.render('The winner is: ' + game.winner, True, (background), (255, 255, 255))
+            textrect = text.get_rect()
+            textrect.centerx = game.win.get_rect().centerx
+            textrect.centery = game.win.get_rect().centery
+            game.win.blit(text, textrect)
 
     # Here it checks if a player is the last player by letting it count up each time a player terminates.
     # It then checks if "number of players" - 1 already terminated. If so the current player is the last one.
@@ -146,6 +150,9 @@ class Game:
 
         self.lastPlayerCounter = 0
         self.eliminatedPlayerCounter = 0
+
+        self.winner = ""
+
 
     def addPlayer(self, name="", color="", left=0, right=0):
         player = Player(name=name, color=color, left=left, right=right)
@@ -256,6 +263,7 @@ def Start2():
     startMenu._dopause = False
     game.addPlayer(name="Spieler_1", color="red", left=276, right=275)
     game.addPlayer(name="Spieler_2", color="white", left=97, right=115)
+    startMenu.disable()
 
 def Start3():
     game.win.fill(background)
@@ -263,6 +271,7 @@ def Start3():
     game.addPlayer(name="Spieler_1", color="red", left=276, right=275)
     game.addPlayer(name="Spieler_2", color="white", left=97, right=115)
     game.addPlayer(name="Spieler_3", color="blue", left=103, right=104)
+    startMenu.disable()
 
 def Start4():
     game.win.fill(background)
@@ -271,6 +280,10 @@ def Start4():
     game.addPlayer(name="Spieler_2", color="white", left=97, right=115)
     game.addPlayer(name="Spieler_3", color="blue", left=103, right=104)
     game.addPlayer(name="Spieler_4", color="green", left=107, right=108)
+    startMenu.disable()
+
+
+
 
 startMenu = pygameMenu.Menu(game.win, game.width, game.height, font = pygameMenu.fonts.FONT_8BIT, title ="ipCurve", dopause=True, bgfun = bgfun)
 startMenu.add_option("2 Spieler", Start2)
@@ -279,19 +292,6 @@ startMenu.add_option("4 Spielern", Start4)
 
 
 
-def NewGame():
-    game.win.fill(background)
-    startMenu
-
-def Exit1():
-    PYGAME_MENU_EXIT
-
-
-endMenu = pygameMenu.TextMenu(game.win, game.width, game.height, font = pygameMenu.fonts.FONT_8BIT, title ="Endmenu", dopause=True, bgfun = bgfun)
-#endMenu.add_line(Player...wins)
-#endMenu.add_option("New Game", NewGame)
-#endMenu.add_option("Exit", Exit1)
-
 run = True
 while run:
 
@@ -299,7 +299,7 @@ while run:
 
     events = pygame.event.get()
     startMenu.mainloop(events)
-    startMenu.disable()
+
 
     if keys[pygame.K_m]:
         startMenu.enable()
