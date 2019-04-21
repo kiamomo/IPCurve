@@ -30,7 +30,7 @@ class Player:
 
         self.setInitialPosition()
 
-        self.score = 10
+        self.score = 1
         self.scoreAccess = 0
         self.runScoreKeeper = True
 
@@ -128,11 +128,7 @@ class Player:
                     game.winner = player.name
             text = font.render('The winner is: ' + game.winner, True, (background), (255, 255, 255))
             text2 = font.render("Press n for NEWGAME!", True, (background), (255, 255, 255))
-            textrect = text.get_rect()
-            textrect2 = text2.get_rect()
-            textrect.centerx = game.win.get_rect().centerx
-            textrect.centery = game.win.get_rect().centery
-            game.win.blit(text, textrect)
+            game.win.blit(text, (game.height/4, game.width/2))
             game.win.blit(text2, (0, game.height-50))
 
     # Here it checks if a player is the last player by letting it count up each time a player terminates.
