@@ -109,7 +109,7 @@ class Player:
     # If so he isn't able to draw anymore.
 
     def lastPlayerCheck(self):
-        if game.lastPlayerCounter is len(game.players) - 1:
+        if game.lastPlayerCounter is len(game.players) -1:
             self.draw = False
             a = 0
             for player in game.players:
@@ -234,7 +234,7 @@ class Game:
             player.draw = True
         player.runCollisionChecks = True
 
-        self.lastPlayerCounter = 0
+        self.lastPlayerCounter = game.eliminatedPlayerCounter
 
         pygame.time.delay(100)
         # Sets new positions and angle etc; Just like at the start of the game
@@ -371,6 +371,7 @@ while run:
             player.scoreKeeper()
 
         player.eliminatedPlayerCheck()
+
 
 
         if player.draw:
